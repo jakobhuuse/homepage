@@ -119,4 +119,12 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  h1 {
+    @apply text-3xl font-bold mb-8;
+  }
+
+  main {
+    @apply p-8;
+  }
 }

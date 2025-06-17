@@ -34,8 +34,8 @@ const games: Game[] = [
 
 export default function GamesPage() {
   return (
-    <main className="p-8">
-      <h1 className="text-3xl font-bold mb-8">Games</h1>
+    <main>
+      <h1>Games</h1>
       <div className="grid md:grid-cols-3 gap-8">
         {games.map((game) => (
           <Link href={game.href} key={game.title}>
