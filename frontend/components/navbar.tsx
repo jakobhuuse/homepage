@@ -22,6 +22,12 @@ export default function Navbar() {
             <Separator orientation="vertical" />
             <NavigationMenuItem>
               <NavigationMenuLink asChild>
+                <Link href={"/games"}>Games</Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <Separator orientation="vertical" />
+            <NavigationMenuItem>
+              <NavigationMenuLink asChild>
                 <Link href={"/about"}>About</Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
