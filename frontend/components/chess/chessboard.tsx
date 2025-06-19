@@ -5,7 +5,7 @@ export default function Chessboard() {
   const cols = Array.from({ length: 8 }, (_, i) => i);
 
   return (
-    <div className="w-full aspect-square max-w-screen-md grid grid-cols-8">
+    <div className="aspect-square grid grid-cols-8 w-full">
       {rows.flatMap((row) =>
         cols.map((col) => {
           const isDark = (row + col) % 2 === 1;

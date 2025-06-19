@@ -36,7 +36,7 @@ export default function GamesPage() {
   return (
     <main>
       <h1>Games</h1>
-      <div className="grid md:grid-cols-3 gap-8">
+      <div className="grid md:grid-cols-4 gap-8">
         {games.map((game) => (
           <Link href={game.href} key={game.title}>
             <Card className="h-full aspect-square cursor-pointer transition-shadow hover:shadow-lg flex flex-col">
