@@ -11,23 +11,23 @@ type Game = {
 const games: Game[] = [
   {
     title: "Chess",
-    image: "/chess.png",
+    image: "/games/chess.png",
     href: "/games/chess",
   },
 
   {
     title: "Sudoku",
-    image: "/sudoku.png",
+    image: "/games/sudoku.png",
     href: "/games/sudoku",
   },
   {
     title: "Tic Tac Toe",
-    image: "/tictactoe.png",
+    image: "/games/tictactoe.png",
     href: "/games/tictactoe",
   },
   {
     title: "Minesweeper",
-    image: "/minesweeper.png",
+    image: "/games/minesweeper.png",
     href: "/games/minesweeper",
   },
 ];
