@@ -1,9 +1,17 @@
 {
-  "name": "myapp",
+  "name": "backend",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "dev": "nodemon --watch './**/*.ts' --exec ts-node bin/www",
+    "start": "node dist/index.js",
+    "build": "tsc --build",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -12,5 +20,17 @@
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
     "pug": "2.0.0-beta11"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.30.0",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.0.7",
+    "eslint": "^9.30.0",
+    "eslint-plugin-perfectionist": "^4.15.0",
+    "nodemon": "^3.1.10",
+    "prettier": "^3.6.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.35.0"
   }
 }
