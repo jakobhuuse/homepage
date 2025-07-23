@@ -1,16 +1,18 @@
 {
-    "compilerOptions": {
-        "module": "NodeNext",
-        "moduleResolution": "NodeNext",
-        "outDir": "dist",
-        "sourceMap": true,
-        "noImplicitAny":  true,
-        "baseUrl": "./",
-},
+   "compilerOptions": {
+      "module": "NodeNext",
+      "moduleResolution": "NodeNext",
+      "outDir": "dist",
+      "noImplicitAny":  true,
+      "baseUrl": "./",
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "sourceMap": true
+   },
 
 "include": [
         "src/**/*.ts"
-    ],
+, "src/shared/routes.ts"    ],
     "exclude": [
         "node_modules",
         "dist"
