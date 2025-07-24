@@ -1,70 +1,50 @@
-import { Request, Response } from 'express';
+import { Request, Response, Router } from 'express';
 import { UserService } from '../services/UserService';
 
-export class UserController {
-  private userService: UserService;
+const userService = new UserService();
+const router = Router();
 
-  constructor() {
-    this.userService = new UserService();
+router.get('/', async (req: Request, res: Response) => {
+    try {
+        const users = await userService.getAllUsers();
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch users' });
+    }
+});
+
+router.get('/:id', async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const user = await userService.getUserById(id);
+
+    if (!user) {
+        res.status(404).json({ error: 'User not found' });
+        return;
+    }
+
+    res.json(user);
+});
+
+router.post('/', async (req: Request, res: Response) => {
+    const user = await userService.createUser(req.body);
+    res.status(201).json(user);
+});
+
+router.put('/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const user = await userService.updateUser(id, req.body);
+
+  if (!user) {
+    res.status(404).json({ error: 'User not found' });
+    return;
   }
 
-  getUsers = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const users = await this.userService.getAllUsers();
-      res.json(users);
-    } catch (error) {
-      res.status(500).json({ error: 'Failed to fetch users' });
-    }
-  };
+  res.json(user);
+});
 
-  getUser = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { id } = req.params;
-      const user = await this.userService.getUserById(id);
-      
-      if (!user) {
-        res.status(404).json({ error: 'User not found' });
-        return;
-      }
-      
-      res.json(user);
-    } catch (error) {
-      res.status(500).json({ error: 'Failed to fetch user' });
-    }
-  };
+router.delete('/:id', async (req: Request, res: Response) => {
+  await userService.deleteUser(req.params.id);
+  res.status(204).send();
+});
 
-  createUser = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const user = await this.userService.createUser(req.body);
-      res.status(201).json(user);
-    } catch (error) {
-      res.status(400).json({ error: 'Failed to create user' });
-    }
-  };
-
-  updateUser = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { id } = req.params;
-      const user = await this.userService.updateUser(id, req.body);
-      
-      if (!user) {
-        res.status(404).json({ error: 'User not found' });
-        return;
-      }
-      
-      res.json(user);
-    } catch (error) {
-      res.status(400).json({ error: 'Failed to update user' });
-    }
-  };
-
-  deleteUser = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { id } = req.params;
-      await this.userService.deleteUser(id);
-      res.status(204).send();
-    } catch (error) {
-      res.status(500).json({ error: 'Failed to delete user' });
-    }
-  };
-}
+export { router as userRoutes };
