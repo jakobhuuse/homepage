@@ -3,6 +3,9 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import router from './shared/routes';
 import { AppDataSource } from './config/data-source';
+import http from 'http';
+import { Server as SocketIOServer } from "socket.io";
+
 
 AppDataSource.initialize()
     .then(() => {
@@ -13,6 +16,8 @@ AppDataSource.initialize()
     });
 
 const app = express();
+const server = http.createServer(app);
+const io = new SocketIOServer(server)
 
 dotenv.config();
 app.use(cors({
@@ -24,3 +29,5 @@ app.use('/api', router)
 app.listen(process.env.PORT || 3000, () => {
     console.log(`Server is running on http://localhost:${process.env.PORT || 3000}`);
 });
+
+export { io };
