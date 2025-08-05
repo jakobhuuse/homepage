@@ -4,7 +4,32 @@ import { ChessService } from '../services/ChessService';
 const chessService = new ChessService();
 const router = Router();
 
-// Create a new game
+/**
+ * @swagger
+ * /chess/create:
+ *   post:
+ *     summary: Create a new chess game
+ *     tags: [Chess]
+ *     requestBody:
+ *       description: Player name for the new game
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [playerName]
+ *             properties:
+ *               playerName:
+ *                 type: string
+ *                 example: Alice
+ *     responses:
+ *       201:
+ *         description: Game created successfully
+ *       400:
+ *         description: Player name is required
+ *       500:
+ *         description: Failed to create game
+ */
 router.post('/create', async (req: Request, res: Response) => {
     try {
         const { playerName } = req.body;
@@ -22,7 +47,33 @@ router.post('/create', async (req: Request, res: Response) => {
     }
 });
 
-// Join a game by invite code
+/**
+ * @swagger
+ * /chess/join:
+ *   post:
+ *     summary: Join an existing game by invite code
+ *     tags: [Chess]
+ *     requestBody:
+ *       description: Player name and invite code
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [inviteCode, playerName]
+ *             properties:
+ *               inviteCode:
+ *                 type: string
+ *                 example: abc123
+ *               playerName:
+ *                 type: string
+ *                 example: Bob
+ *     responses:
+ *       200:
+ *         description: Joined game successfully
+ *       400:
+ *         description: Missing invite code or player name / Failed to join game
+ */
 router.post('/join', async (req: Request, res: Response) => {
     try {
         const { inviteCode, playerName } = req.body;
@@ -49,7 +100,27 @@ router.post('/join', async (req: Request, res: Response) => {
     }
 });
 
-// Get game by invite code
+/**
+ * @swagger
+ * /chess/invite/{inviteCode}:
+ *   get:
+ *     summary: Get game details using an invite code
+ *     tags: [Chess]
+ *     parameters:
+ *       - in: path
+ *         name: inviteCode
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Unique invite code for the game
+ *     responses:
+ *       200:
+ *         description: Game found
+ *       404:
+ *         description: Game not found
+ *       500:
+ *         description: Failed to fetch game
+ */
 router.get('/invite/:inviteCode', async (req: Request, res: Response) => {
     try {
         const { inviteCode } = req.params;
@@ -67,7 +138,27 @@ router.get('/invite/:inviteCode', async (req: Request, res: Response) => {
     }
 });
 
-// Get game by ID
+/**
+ * @swagger
+ * /chess/{gameId}:
+ *   get:
+ *     summary: Get game details by game ID
+ *     tags: [Chess]
+ *     parameters:
+ *       - in: path
+ *         name: gameId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Unique ID of the game
+ *     responses:
+ *       200:
+ *         description: Game found
+ *       404:
+ *         description: Game not found
+ *       500:
+ *         description: Failed to fetch game
+ */
 router.get('/:gameId', async (req: Request, res: Response) => {
     try {
         const { gameId } = req.params;
@@ -85,7 +176,46 @@ router.get('/:gameId', async (req: Request, res: Response) => {
     }
 });
 
-// Make a move
+/**
+ * @swagger
+ * /chess/{gameId}/move:
+ *   post:
+ *     summary: Make a move in a game
+ *     tags: [Chess]
+ *     parameters:
+ *       - in: path
+ *         name: gameId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the game
+ *     requestBody:
+ *       description: Move details
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [playerId, from, to]
+ *             properties:
+ *               playerId:
+ *                 type: string
+ *                 example: player123
+ *               from:
+ *                 type: string
+ *                 example: e2
+ *               to:
+ *                 type: string
+ *                 example: e4
+ *               promotion:
+ *                 type: string
+ *                 example: q
+ *     responses:
+ *       200:
+ *         description: Move processed successfully
+ *       400:
+ *         description: Invalid move data / Failed to make move
+ */
 router.post('/:gameId/move', async (req: Request, res: Response) => {
     try {
         const { gameId } = req.params;
@@ -123,7 +253,37 @@ router.post('/:gameId/move', async (req: Request, res: Response) => {
     }
 });
 
-// Abandon game
+/**
+ * @swagger
+ * /chess/{gameId}/abandon:
+ *   post:
+ *     summary: Abandon a game
+ *     tags: [Chess]
+ *     parameters:
+ *       - in: path
+ *         name: gameId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the game to abandon
+ *     requestBody:
+ *       description: Player abandoning the game
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [playerId]
+ *             properties:
+ *               playerId:
+ *                 type: string
+ *                 example: player123
+ *     responses:
+ *       204:
+ *         description: Game abandoned successfully
+ *       400:
+ *         description: Player ID is required / Failed to abandon game
+ */
 router.post('/:gameId/abandon', async (req: Request, res: Response) => {
     try {
         const { gameId } = req.params;
