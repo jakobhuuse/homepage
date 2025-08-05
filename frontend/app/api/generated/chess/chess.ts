@@ -32,10 +32,20 @@ import type {
 } from 'axios';
 
 import type {
-  PostChessCreateBody,
+  CreateGameDto,
+  GameStateDto,
+  GetChessGameId404,
+  GetChessGameId500,
+  GetChessInviteInviteCode404,
+  GetChessInviteInviteCode500,
+  JoinGameDto,
+  PostChessCreate400,
+  PostChessCreate500,
+  PostChessGameIdAbandon400,
   PostChessGameIdAbandonBody,
+  PostChessGameIdMove400,
   PostChessGameIdMoveBody,
-  PostChessJoinBody
+  PostChessJoin400
 } from '.././model';
 
 
@@ -46,21 +56,21 @@ import type {
  * @summary Create a new chess game
  */
 export const postChessCreate = (
-    postChessCreateBody: PostChessCreateBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<null>> => {
+    createGameDto: CreateGameDto, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GameStateDto>> => {
     
     
     return axios.post(
       `http://localhost:8080/api/chess/create`,
-      postChessCreateBody,options
+      createGameDto,options
     );
   }
 
 
 
-export const getPostChessCreateMutationOptions = <TError = AxiosError<null | null>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postChessCreate>>, TError,{data: PostChessCreateBody}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof postChessCreate>>, TError,{data: PostChessCreateBody}, TContext> => {
+export const getPostChessCreateMutationOptions = <TError = AxiosError<PostChessCreate400 | PostChessCreate500>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postChessCreate>>, TError,{data: CreateGameDto}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof postChessCreate>>, TError,{data: CreateGameDto}, TContext> => {
 
 const mutationKey = ['postChessCreate'];
 const {mutation: mutationOptions, axios: axiosOptions} = options ?
@@ -72,7 +82,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postChessCreate>>, {data: PostChessCreateBody}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postChessCreate>>, {data: CreateGameDto}> = (props) => {
           const {data} = props ?? {};
 
           return  postChessCreate(data,axiosOptions)
@@ -84,18 +94,18 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type PostChessCreateMutationResult = NonNullable<Awaited<ReturnType<typeof postChessCreate>>>
-    export type PostChessCreateMutationBody = PostChessCreateBody
-    export type PostChessCreateMutationError = AxiosError<null | null>
+    export type PostChessCreateMutationBody = CreateGameDto
+    export type PostChessCreateMutationError = AxiosError<PostChessCreate400 | PostChessCreate500>
 
     /**
  * @summary Create a new chess game
  */
-export const usePostChessCreate = <TError = AxiosError<null | null>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postChessCreate>>, TError,{data: PostChessCreateBody}, TContext>, axios?: AxiosRequestConfig}
+export const usePostChessCreate = <TError = AxiosError<PostChessCreate400 | PostChessCreate500>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postChessCreate>>, TError,{data: CreateGameDto}, TContext>, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof postChessCreate>>,
         TError,
-        {data: PostChessCreateBody},
+        {data: CreateGameDto},
         TContext
       > => {
 
@@ -107,21 +117,21 @@ export const usePostChessCreate = <TError = AxiosError<null | null>,
  * @summary Join an existing game by invite code
  */
 export const postChessJoin = (
-    postChessJoinBody: PostChessJoinBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<null>> => {
+    joinGameDto: JoinGameDto, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GameStateDto>> => {
     
     
     return axios.post(
       `http://localhost:8080/api/chess/join`,
-      postChessJoinBody,options
+      joinGameDto,options
     );
   }
 
 
 
-export const getPostChessJoinMutationOptions = <TError = AxiosError<null>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postChessJoin>>, TError,{data: PostChessJoinBody}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof postChessJoin>>, TError,{data: PostChessJoinBody}, TContext> => {
+export const getPostChessJoinMutationOptions = <TError = AxiosError<PostChessJoin400>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postChessJoin>>, TError,{data: JoinGameDto}, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof postChessJoin>>, TError,{data: JoinGameDto}, TContext> => {
 
 const mutationKey = ['postChessJoin'];
 const {mutation: mutationOptions, axios: axiosOptions} = options ?
@@ -133,7 +143,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postChessJoin>>, {data: PostChessJoinBody}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postChessJoin>>, {data: JoinGameDto}> = (props) => {
           const {data} = props ?? {};
 
           return  postChessJoin(data,axiosOptions)
@@ -145,18 +155,18 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type PostChessJoinMutationResult = NonNullable<Awaited<ReturnType<typeof postChessJoin>>>
-    export type PostChessJoinMutationBody = PostChessJoinBody
-    export type PostChessJoinMutationError = AxiosError<null>
+    export type PostChessJoinMutationBody = JoinGameDto
+    export type PostChessJoinMutationError = AxiosError<PostChessJoin400>
 
     /**
  * @summary Join an existing game by invite code
  */
-export const usePostChessJoin = <TError = AxiosError<null>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postChessJoin>>, TError,{data: PostChessJoinBody}, TContext>, axios?: AxiosRequestConfig}
+export const usePostChessJoin = <TError = AxiosError<PostChessJoin400>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postChessJoin>>, TError,{data: JoinGameDto}, TContext>, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof postChessJoin>>,
         TError,
-        {data: PostChessJoinBody},
+        {data: JoinGameDto},
         TContext
       > => {
 
@@ -169,7 +179,7 @@ export const usePostChessJoin = <TError = AxiosError<null>,
  */
 export const getChessInviteInviteCode = (
     inviteCode: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<null>> => {
+ ): Promise<AxiosResponse<GameStateDto>> => {
     
     
     return axios.get(
@@ -183,7 +193,7 @@ export const getGetChessInviteInviteCodeQueryKey = (inviteCode?: string,) => {
     }
 
     
-export const getGetChessInviteInviteCodeQueryOptions = <TData = Awaited<ReturnType<typeof getChessInviteInviteCode>>, TError = AxiosError<null | null>>(inviteCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getChessInviteInviteCode>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetChessInviteInviteCodeQueryOptions = <TData = Awaited<ReturnType<typeof getChessInviteInviteCode>>, TError = AxiosError<GetChessInviteInviteCode404 | GetChessInviteInviteCode500>>(inviteCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getChessInviteInviteCode>>, TError, TData>>, axios?: AxiosRequestConfig}
 ) => {
 
 const {query: queryOptions, axios: axiosOptions} = options ?? {};
@@ -202,10 +212,10 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetChessInviteInviteCodeQueryResult = NonNullable<Awaited<ReturnType<typeof getChessInviteInviteCode>>>
-export type GetChessInviteInviteCodeQueryError = AxiosError<null | null>
+export type GetChessInviteInviteCodeQueryError = AxiosError<GetChessInviteInviteCode404 | GetChessInviteInviteCode500>
 
 
-export function useGetChessInviteInviteCode<TData = Awaited<ReturnType<typeof getChessInviteInviteCode>>, TError = AxiosError<null | null>>(
+export function useGetChessInviteInviteCode<TData = Awaited<ReturnType<typeof getChessInviteInviteCode>>, TError = AxiosError<GetChessInviteInviteCode404 | GetChessInviteInviteCode500>>(
  inviteCode: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getChessInviteInviteCode>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getChessInviteInviteCode>>,
@@ -215,7 +225,7 @@ export function useGetChessInviteInviteCode<TData = Awaited<ReturnType<typeof ge
       >, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetChessInviteInviteCode<TData = Awaited<ReturnType<typeof getChessInviteInviteCode>>, TError = AxiosError<null | null>>(
+export function useGetChessInviteInviteCode<TData = Awaited<ReturnType<typeof getChessInviteInviteCode>>, TError = AxiosError<GetChessInviteInviteCode404 | GetChessInviteInviteCode500>>(
  inviteCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getChessInviteInviteCode>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getChessInviteInviteCode>>,
@@ -225,7 +235,7 @@ export function useGetChessInviteInviteCode<TData = Awaited<ReturnType<typeof ge
       >, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetChessInviteInviteCode<TData = Awaited<ReturnType<typeof getChessInviteInviteCode>>, TError = AxiosError<null | null>>(
+export function useGetChessInviteInviteCode<TData = Awaited<ReturnType<typeof getChessInviteInviteCode>>, TError = AxiosError<GetChessInviteInviteCode404 | GetChessInviteInviteCode500>>(
  inviteCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getChessInviteInviteCode>>, TError, TData>>, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -233,7 +243,7 @@ export function useGetChessInviteInviteCode<TData = Awaited<ReturnType<typeof ge
  * @summary Get game details using an invite code
  */
 
-export function useGetChessInviteInviteCode<TData = Awaited<ReturnType<typeof getChessInviteInviteCode>>, TError = AxiosError<null | null>>(
+export function useGetChessInviteInviteCode<TData = Awaited<ReturnType<typeof getChessInviteInviteCode>>, TError = AxiosError<GetChessInviteInviteCode404 | GetChessInviteInviteCode500>>(
  inviteCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getChessInviteInviteCode>>, TError, TData>>, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -254,7 +264,7 @@ export function useGetChessInviteInviteCode<TData = Awaited<ReturnType<typeof ge
  */
 export const getChessGameId = (
     gameId: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<null>> => {
+ ): Promise<AxiosResponse<GameStateDto>> => {
     
     
     return axios.get(
@@ -268,7 +278,7 @@ export const getGetChessGameIdQueryKey = (gameId?: string,) => {
     }
 
     
-export const getGetChessGameIdQueryOptions = <TData = Awaited<ReturnType<typeof getChessGameId>>, TError = AxiosError<null | null>>(gameId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getChessGameId>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getGetChessGameIdQueryOptions = <TData = Awaited<ReturnType<typeof getChessGameId>>, TError = AxiosError<GetChessGameId404 | GetChessGameId500>>(gameId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getChessGameId>>, TError, TData>>, axios?: AxiosRequestConfig}
 ) => {
 
 const {query: queryOptions, axios: axiosOptions} = options ?? {};
@@ -287,10 +297,10 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type GetChessGameIdQueryResult = NonNullable<Awaited<ReturnType<typeof getChessGameId>>>
-export type GetChessGameIdQueryError = AxiosError<null | null>
+export type GetChessGameIdQueryError = AxiosError<GetChessGameId404 | GetChessGameId500>
 
 
-export function useGetChessGameId<TData = Awaited<ReturnType<typeof getChessGameId>>, TError = AxiosError<null | null>>(
+export function useGetChessGameId<TData = Awaited<ReturnType<typeof getChessGameId>>, TError = AxiosError<GetChessGameId404 | GetChessGameId500>>(
  gameId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getChessGameId>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getChessGameId>>,
@@ -300,7 +310,7 @@ export function useGetChessGameId<TData = Awaited<ReturnType<typeof getChessGame
       >, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetChessGameId<TData = Awaited<ReturnType<typeof getChessGameId>>, TError = AxiosError<null | null>>(
+export function useGetChessGameId<TData = Awaited<ReturnType<typeof getChessGameId>>, TError = AxiosError<GetChessGameId404 | GetChessGameId500>>(
  gameId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getChessGameId>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getChessGameId>>,
@@ -310,7 +320,7 @@ export function useGetChessGameId<TData = Awaited<ReturnType<typeof getChessGame
       >, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetChessGameId<TData = Awaited<ReturnType<typeof getChessGameId>>, TError = AxiosError<null | null>>(
+export function useGetChessGameId<TData = Awaited<ReturnType<typeof getChessGameId>>, TError = AxiosError<GetChessGameId404 | GetChessGameId500>>(
  gameId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getChessGameId>>, TError, TData>>, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -318,7 +328,7 @@ export function useGetChessGameId<TData = Awaited<ReturnType<typeof getChessGame
  * @summary Get game details by game ID
  */
 
-export function useGetChessGameId<TData = Awaited<ReturnType<typeof getChessGameId>>, TError = AxiosError<null | null>>(
+export function useGetChessGameId<TData = Awaited<ReturnType<typeof getChessGameId>>, TError = AxiosError<GetChessGameId404 | GetChessGameId500>>(
  gameId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getChessGameId>>, TError, TData>>, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
@@ -340,7 +350,7 @@ export function useGetChessGameId<TData = Awaited<ReturnType<typeof getChessGame
 export const postChessGameIdMove = (
     gameId: string,
     postChessGameIdMoveBody: PostChessGameIdMoveBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<null>> => {
+ ): Promise<AxiosResponse<GameStateDto>> => {
     
     
     return axios.post(
@@ -351,7 +361,7 @@ export const postChessGameIdMove = (
 
 
 
-export const getPostChessGameIdMoveMutationOptions = <TError = AxiosError<null>,
+export const getPostChessGameIdMoveMutationOptions = <TError = AxiosError<PostChessGameIdMove400>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postChessGameIdMove>>, TError,{gameId: string;data: PostChessGameIdMoveBody}, TContext>, axios?: AxiosRequestConfig}
 ): UseMutationOptions<Awaited<ReturnType<typeof postChessGameIdMove>>, TError,{gameId: string;data: PostChessGameIdMoveBody}, TContext> => {
 
@@ -378,12 +388,12 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type PostChessGameIdMoveMutationResult = NonNullable<Awaited<ReturnType<typeof postChessGameIdMove>>>
     export type PostChessGameIdMoveMutationBody = PostChessGameIdMoveBody
-    export type PostChessGameIdMoveMutationError = AxiosError<null>
+    export type PostChessGameIdMoveMutationError = AxiosError<PostChessGameIdMove400>
 
     /**
  * @summary Make a move in a game
  */
-export const usePostChessGameIdMove = <TError = AxiosError<null>,
+export const usePostChessGameIdMove = <TError = AxiosError<PostChessGameIdMove400>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postChessGameIdMove>>, TError,{gameId: string;data: PostChessGameIdMoveBody}, TContext>, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof postChessGameIdMove>>,
@@ -413,7 +423,7 @@ export const postChessGameIdAbandon = (
 
 
 
-export const getPostChessGameIdAbandonMutationOptions = <TError = AxiosError<null>,
+export const getPostChessGameIdAbandonMutationOptions = <TError = AxiosError<PostChessGameIdAbandon400>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postChessGameIdAbandon>>, TError,{gameId: string;data: PostChessGameIdAbandonBody}, TContext>, axios?: AxiosRequestConfig}
 ): UseMutationOptions<Awaited<ReturnType<typeof postChessGameIdAbandon>>, TError,{gameId: string;data: PostChessGameIdAbandonBody}, TContext> => {
 
@@ -440,12 +450,12 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type PostChessGameIdAbandonMutationResult = NonNullable<Awaited<ReturnType<typeof postChessGameIdAbandon>>>
     export type PostChessGameIdAbandonMutationBody = PostChessGameIdAbandonBody
-    export type PostChessGameIdAbandonMutationError = AxiosError<null>
+    export type PostChessGameIdAbandonMutationError = AxiosError<PostChessGameIdAbandon400>
 
     /**
  * @summary Abandon a game
  */
-export const usePostChessGameIdAbandon = <TError = AxiosError<null>,
+export const usePostChessGameIdAbandon = <TError = AxiosError<PostChessGameIdAbandon400>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postChessGameIdAbandon>>, TError,{gameId: string;data: PostChessGameIdAbandonBody}, TContext>, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof postChessGameIdAbandon>>,

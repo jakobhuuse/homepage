@@ -1,5 +1,6 @@
 import { Repository } from 'typeorm';
-import { ChessGame, GameStatus, PieceColor } from '../models/ChessGame';
+import { ChessGame} from '../models/ChessGame';
+import { GameStatus, PieceColor } from '../types';
 import { CreateGameDto, JoinGameDto, MakeMoveDto, GameStateDto, ChessMove, ChessBoard } from '../types';
 import { AppDataSource } from '../../../config/data-source';
 import { ChessGameLogic } from '../utils/ChessGameLogic';

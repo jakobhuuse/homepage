@@ -1,7 +1,5 @@
-import { version } from "os";
-
 export const swaggerOptions = {
-    swaggerDefinition: {
+    definition: {
         openapi: '3.0.0',
         info: {
             title: 'Homepage API',
@@ -16,8 +14,14 @@ export const swaggerOptions = {
                 url: "http://localhost:8080/api"
             }
         ],
+        components: {
+        schemas: {}
+        }
     },
+
     apis: [
         './src/domains/**/controllers/*.ts',
+        './src/domains/**/types.ts',
+        './src/shared/routes/*.ts',
     ]
 }

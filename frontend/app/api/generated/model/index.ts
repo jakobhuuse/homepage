@@ -6,7 +6,34 @@
  * OpenAPI spec version: 1.0.0
  */
 
+export * from './chessBoard';
+export * from './chessMove';
+export * from './chessMovePromotion';
+export * from './chessPiece';
+export * from './chessPieceType';
+export * from './chessPosition';
+export * from './createGameDto';
+export * from './gameStateDto';
+export * from './gameStatus';
+export * from './getChessGameId404';
+export * from './getChessGameId500';
+export * from './getChessInviteInviteCode404';
+export * from './getChessInviteInviteCode500';
+export * from './getHealth200';
+export * from './joinGameDto';
+export * from './makeMoveDto';
+export * from './makeMoveDtoPromotion';
+export * from './pieceColor';
+export * from './postChessCreate400';
+export * from './postChessCreate500';
 export * from './postChessCreateBody';
+export * from './postChessGameIdAbandon400';
 export * from './postChessGameIdAbandonBody';
+export * from './postChessGameIdMove400';
 export * from './postChessGameIdMoveBody';
+export * from './postChessGameIdMoveBodyPromotion';
+export * from './postChessJoin400';
 export * from './postChessJoinBody';
+export * from './webSocketMessage';
+export * from './webSocketMessageData';
+export * from './webSocketMessageType';

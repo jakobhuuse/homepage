@@ -1,16 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-
-export enum GameStatus {
-  WAITING = 'waiting',
-  IN_PROGRESS = 'in_progress',
-  COMPLETED = 'completed',
-  ABANDONED = 'abandoned'
-}
-
-export enum PieceColor {
-  WHITE = 'white',
-  BLACK = 'black'
-}
+import { GameStatus, PieceColor } from '../types'
 
 @Entity('chess_games')
 export class ChessGame {

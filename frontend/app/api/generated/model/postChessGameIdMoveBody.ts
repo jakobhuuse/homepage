@@ -5,10 +5,11 @@
  * API documentation for the Homepage project
  * OpenAPI spec version: 1.0.0
  */
+import type { PostChessGameIdMoveBodyPromotion } from './postChessGameIdMoveBodyPromotion';
 
 export type PostChessGameIdMoveBody = {
   playerId: string;
   from: string;
   to: string;
-  promotion?: string;
+  promotion?: PostChessGameIdMoveBodyPromotion;
 };

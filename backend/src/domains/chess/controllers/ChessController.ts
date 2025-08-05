@@ -16,19 +16,34 @@ const router = Router();
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required: [playerName]
- *             properties:
- *               playerName:
- *                 type: string
- *                 example: Alice
+ *             $ref: '#/components/schemas/CreateGameDto'
  *     responses:
  *       201:
  *         description: Game created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/GameStateDto'
  *       400:
  *         description: Player name is required
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Player name is required
  *       500:
  *         description: Failed to create game
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Failed to create game
  */
 router.post('/create', async (req: Request, res: Response) => {
     try {
@@ -59,20 +74,24 @@ router.post('/create', async (req: Request, res: Response) => {
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required: [inviteCode, playerName]
- *             properties:
- *               inviteCode:
- *                 type: string
- *                 example: abc123
- *               playerName:
- *                 type: string
- *                 example: Bob
+ *             $ref: '#/components/schemas/JoinGameDto'
  *     responses:
  *       200:
  *         description: Joined game successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/GameStateDto'
  *       400:
  *         description: Missing invite code or player name / Failed to join game
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Invite code and player name are required
  */
 router.post('/join', async (req: Request, res: Response) => {
     try {
@@ -116,10 +135,30 @@ router.post('/join', async (req: Request, res: Response) => {
  *     responses:
  *       200:
  *         description: Game found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/GameStateDto'
  *       404:
  *         description: Game not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Game not found
  *       500:
  *         description: Failed to fetch game
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Failed to fetch game
  */
 router.get('/invite/:inviteCode', async (req: Request, res: Response) => {
     try {
@@ -154,10 +193,30 @@ router.get('/invite/:inviteCode', async (req: Request, res: Response) => {
  *     responses:
  *       200:
  *         description: Game found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/GameStateDto'
  *       404:
  *         description: Game not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Game not found
  *       500:
  *         description: Failed to fetch game
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Failed to fetch game
  */
 router.get('/:gameId', async (req: Request, res: Response) => {
     try {
@@ -209,12 +268,25 @@ router.get('/:gameId', async (req: Request, res: Response) => {
  *                 example: e4
  *               promotion:
  *                 type: string
+ *                 enum: [q, r, b, n]
  *                 example: q
  *     responses:
  *       200:
  *         description: Move processed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/GameStateDto'
  *       400:
  *         description: Invalid move data / Failed to make move
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Invalid move data
  */
 router.post('/:gameId/move', async (req: Request, res: Response) => {
     try {
@@ -283,6 +355,14 @@ router.post('/:gameId/move', async (req: Request, res: Response) => {
  *         description: Game abandoned successfully
  *       400:
  *         description: Player ID is required / Failed to abandon game
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Player ID is required
  */
 router.post('/:gameId/abandon', async (req: Request, res: Response) => {
     try {
