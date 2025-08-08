@@ -38,39 +38,17 @@ export enum PieceColor {
  * @swagger
  * components:
  *   schemas:
- *     CreateGameDto:
- *       type: object
- *       required:
- *         - playerName
- *       properties:
- *         playerName:
- *           type: string
- *           example: "Alice"
- */
-export interface CreateGameDto {
-  playerName: string;
-}
-
-/**
- * @swagger
- * components:
- *   schemas:
  *     JoinGameDto:
  *       type: object
  *       required:
  *         - inviteCode
- *         - playerName
  *       properties:
  *         inviteCode:
  *           type: string
  *           example: "ABC123"
- *         playerName:
- *           type: string
- *           example: "Bob"
  */
 export interface JoinGameDto {
   inviteCode: string;
-  playerName: string;
 }
 
 /**
@@ -258,14 +236,6 @@ export interface ChessMove {
  *           type: string
  *           nullable: true
  *           example: "user2"
- *         whitePlayerName:
- *           type: string
- *           nullable: true
- *           example: "Alice"
- *         blackPlayerName:
- *           type: string
- *           nullable: true
- *           example: "Bob"
  *         status:
  *           $ref: '#/components/schemas/GameStatus'
  *         currentTurn:
@@ -302,8 +272,6 @@ export interface GameStateDto {
   inviteCode: string;
   whitePlayerId: string | null;
   blackPlayerId: string | null;
-  whitePlayerName: string | null;
-  blackPlayerName: string | null;
   status: GameStatus;
   currentTurn: PieceColor;
   boardState: ChessBoard;

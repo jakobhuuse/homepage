@@ -32,14 +32,12 @@ import type {
 } from 'axios';
 
 import type {
-  CreateGameDto,
   GameStateDto,
   GetChessGameId404,
   GetChessGameId500,
   GetChessInviteInviteCode404,
   GetChessInviteInviteCode500,
   JoinGameDto,
-  PostChessCreate400,
   PostChessCreate500,
   PostChessGameIdAbandon400,
   PostChessGameIdAbandonBody,
@@ -56,21 +54,20 @@ import type {
  * @summary Create a new chess game
  */
 export const postChessCreate = (
-    createGameDto: CreateGameDto, options?: AxiosRequestConfig
+     options?: AxiosRequestConfig
  ): Promise<AxiosResponse<GameStateDto>> => {
     
     
     return axios.post(
-      `http://localhost:8080/api/chess/create`,
-      createGameDto,options
+      `http://localhost:8080/api/chess/create`,undefined,options
     );
   }
 
 
 
-export const getPostChessCreateMutationOptions = <TError = AxiosError<PostChessCreate400 | PostChessCreate500>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postChessCreate>>, TError,{data: CreateGameDto}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof postChessCreate>>, TError,{data: CreateGameDto}, TContext> => {
+export const getPostChessCreateMutationOptions = <TError = AxiosError<PostChessCreate500>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postChessCreate>>, TError,void, TContext>, axios?: AxiosRequestConfig}
+): UseMutationOptions<Awaited<ReturnType<typeof postChessCreate>>, TError,void, TContext> => {
 
 const mutationKey = ['postChessCreate'];
 const {mutation: mutationOptions, axios: axiosOptions} = options ?
@@ -82,10 +79,10 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postChessCreate>>, {data: CreateGameDto}> = (props) => {
-          const {data} = props ?? {};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postChessCreate>>, void> = () => {
+          
 
-          return  postChessCreate(data,axiosOptions)
+          return  postChessCreate(axiosOptions)
         }
 
         
@@ -94,18 +91,18 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type PostChessCreateMutationResult = NonNullable<Awaited<ReturnType<typeof postChessCreate>>>
-    export type PostChessCreateMutationBody = CreateGameDto
-    export type PostChessCreateMutationError = AxiosError<PostChessCreate400 | PostChessCreate500>
+    
+    export type PostChessCreateMutationError = AxiosError<PostChessCreate500>
 
     /**
  * @summary Create a new chess game
  */
-export const usePostChessCreate = <TError = AxiosError<PostChessCreate400 | PostChessCreate500>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postChessCreate>>, TError,{data: CreateGameDto}, TContext>, axios?: AxiosRequestConfig}
+export const usePostChessCreate = <TError = AxiosError<PostChessCreate500>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postChessCreate>>, TError,void, TContext>, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof postChessCreate>>,
         TError,
-        {data: CreateGameDto},
+        void,
         TContext
       > => {
 

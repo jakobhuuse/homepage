@@ -17,10 +17,6 @@ export interface GameStateDto {
   whitePlayerId?: string | null;
   /** @nullable */
   blackPlayerId?: string | null;
-  /** @nullable */
-  whitePlayerName?: string | null;
-  /** @nullable */
-  blackPlayerName?: string | null;
   status: GameStatus;
   currentTurn: PieceColor;
   boardState: ChessBoard;

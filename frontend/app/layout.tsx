@@ -1,16 +1,6 @@
 import Navbar from "@/components/navbar";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuViewport,
-} from "@/components/ui/navigation-menu"
+import Providers from "./providers";
 
 export default function RootLayout({
   children,
@@ -20,15 +10,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Navbar/>
+        <Providers>
+          <Navbar />
           {children}
-        </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );

@@ -1,7 +1,7 @@
 import { Repository } from 'typeorm';
 import { ChessGame} from '../models/ChessGame';
 import { GameStatus, PieceColor } from '../types';
-import { CreateGameDto, JoinGameDto, MakeMoveDto, GameStateDto, ChessMove, ChessBoard } from '../types';
+import { JoinGameDto, MakeMoveDto, GameStateDto, ChessMove, ChessBoard } from '../types';
 import { AppDataSource } from '../../../config/data-source';
 import { ChessGameLogic } from '../utils/ChessGameLogic';
 import { randomBytes } from 'crypto';
@@ -17,14 +17,13 @@ export class ChessService {
     return randomBytes(6).toString('hex').toUpperCase();
   }
 
-  async createGame(createGameDto: CreateGameDto): Promise<GameStateDto> {
+  async createGame(): Promise<GameStateDto> {
     const inviteCode = this.generateInviteCode();
     const initialBoard = ChessGameLogic.getInitialBoard();
     
     const game = this.gameRepository.create({
       inviteCode,
-      whitePlayerId: randomBytes(16).toString('hex'), // Generate anonymous player ID
-      whitePlayerName: createGameDto.playerName,
+      whitePlayerId: randomBytes(16).toString('hex'),
       status: GameStatus.WAITING,
       currentTurn: PieceColor.WHITE,
       boardState: JSON.stringify(initialBoard),
@@ -56,7 +55,6 @@ export class ChessService {
     }
 
     game.blackPlayerId = randomBytes(16).toString('hex');
-    game.blackPlayerName = joinGameDto.playerName;
     game.status = GameStatus.IN_PROGRESS;
 
     const updatedGame = await this.gameRepository.save(game);
@@ -206,8 +204,6 @@ export class ChessService {
       inviteCode: game.inviteCode,
       whitePlayerId: game.whitePlayerId,
       blackPlayerId: game.blackPlayerId,
-      whitePlayerName: game.whitePlayerName,
-      blackPlayerName: game.blackPlayerName,
       status: game.status,
       currentTurn: game.currentTurn,
       boardState: JSON.parse(game.boardState),

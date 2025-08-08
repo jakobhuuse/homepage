@@ -8,5 +8,4 @@
 
 export interface JoinGameDto {
   inviteCode: string;
-  playerName: string;
 }

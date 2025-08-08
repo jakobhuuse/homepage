@@ -10,13 +10,6 @@ const router = Router();
  *   post:
  *     summary: Create a new chess game
  *     tags: [Chess]
- *     requestBody:
- *       description: Player name for the new game
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/CreateGameDto'
  *     responses:
  *       201:
  *         description: Game created successfully
@@ -24,16 +17,6 @@ const router = Router();
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/GameStateDto'
- *       400:
- *         description: Player name is required
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   example: Player name is required
  *       500:
  *         description: Failed to create game
  *         content:
@@ -47,14 +30,7 @@ const router = Router();
  */
 router.post('/create', async (req: Request, res: Response) => {
     try {
-        const { playerName } = req.body;
-        
-        if (!playerName) {
-            res.status(400).json({ error: 'Player name is required' });
-            return;
-        }
-
-        const gameState = await chessService.createGame({ playerName });
+        const gameState = await chessService.createGame();
         res.status(201).json(gameState);
     } catch (error) {
         console.error('Error creating game:', error);
@@ -69,7 +45,7 @@ router.post('/create', async (req: Request, res: Response) => {
  *     summary: Join an existing game by invite code
  *     tags: [Chess]
  *     requestBody:
- *       description: Player name and invite code
+ *       description: Invite code
  *       required: true
  *       content:
  *         application/json:
@@ -83,7 +59,7 @@ router.post('/create', async (req: Request, res: Response) => {
  *             schema:
  *               $ref: '#/components/schemas/GameStateDto'
  *       400:
- *         description: Missing invite code or player name / Failed to join game
+ *         description: Failed to join game
  *         content:
  *           application/json:
  *             schema:
@@ -91,23 +67,23 @@ router.post('/create', async (req: Request, res: Response) => {
  *               properties:
  *                 error:
  *                   type: string
- *                   example: Invite code and player name are required
+ *                   example: Invite code is required
  */
 router.post('/join', async (req: Request, res: Response) => {
     try {
-        const { inviteCode, playerName } = req.body;
+        const { inviteCode} = req.body;
         
-        if (!inviteCode || !playerName) {
-            res.status(400).json({ error: 'Invite code and player name are required' });
+        if (!inviteCode) {
+            res.status(400).json({ error: 'Invite code is required' });
             return;
         }
 
-        const gameState = await chessService.joinGame({ inviteCode, playerName });
+        const gameState = await chessService.joinGame({ inviteCode });
         
         // Notify via WebSocket that a player joined (if WebSocket service is available)
         const wsService = (global as any).wsService;
         if (wsService) {
-            wsService.notifyPlayerJoined(gameState.id, playerName, gameState.blackPlayerId!);
+            wsService.notifyPlayerJoined(gameState.id, gameState.blackPlayerId!);
             wsService.notifyGameUpdate(gameState.id, gameState);
         }
         
@@ -310,7 +286,7 @@ router.post('/:gameId/move', async (req: Request, res: Response) => {
             
             // Check if game ended
             if (gameState.isCheckmate) {
-                const winner = gameState.winner === 'white' ? gameState.whitePlayerName : gameState.blackPlayerName;
+                const winner = gameState.winner;
                 wsService.notifyGameEnded(gameId, winner, 'checkmate');
             } else if (gameState.isStalemate) {
                 wsService.notifyGameEnded(gameId, null, 'stalemate');
@@ -381,7 +357,7 @@ router.post('/:gameId/abandon', async (req: Request, res: Response) => {
         if (wsService) {
             const gameState = await chessService.getGameById(gameId);
             if (gameState) {
-                const winner = gameState.winner === 'white' ? gameState.whitePlayerName : gameState.blackPlayerName;
+                const winner = gameState.winner;
                 wsService.notifyGameEnded(gameId, winner, 'abandoned');
             }
         }

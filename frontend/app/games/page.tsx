@@ -16,19 +16,9 @@ const games: Game[] = [
   },
 
   {
-    title: "Sudoku",
-    image: "/games/sudoku.png",
-    href: "/games/sudoku",
-  },
-  {
-    title: "Tic Tac Toe",
-    image: "/games/tictactoe.png",
-    href: "/games/tictactoe",
-  },
-  {
-    title: "Minesweeper",
-    image: "/games/minesweeper.png",
-    href: "/games/minesweeper",
+    title: "More to come...",
+    image: "/games/placeholder.png",
+    href: "/games",
   },
 ];
 
