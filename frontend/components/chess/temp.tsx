@@ -1,14 +1,29 @@
 'use client'
 
 import { usePostChessCreate } from "@/app/api/generated/chess/chess";
+import { Button } from "../ui/button";
 
 
 export default function ChessBoard() {
-    const {data, isError} = usePostChessCreate()
+const createGameMutation = usePostChessCreate();
 
-    console.log(data, isError);
+const handleCreateGame = () => {
+  createGameMutation.mutate();
+};
+
+// Check the results
+const { data, isError, isPending, isSuccess } = createGameMutation;
 
     return (
-        <div>Hello!</div>
-    )
-}
+        <div>
+           { !isSuccess && <Button onClick={handleCreateGame}>
+            Create Game
+            </Button>
+            }
+            {isPending && <p>Creating game...</p>}
+            {isError && <p>Error creating game.</p>}
+            {data && <p>Game created! Invite code: {data.data.inviteCode}</p>}
+        </div>
+        
+    );
+}   
