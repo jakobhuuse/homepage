@@ -1,83 +1,55 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Image from "next/image";
-import { ChessPiece, pieceData } from "./types";
-import { initialBoard, getPossibleMoves } from "./game-logic";
+import React from 'react';
+import ChessSquare from './chess-square';
+import { GameStateDto } from '@/app/api/generated/model';
 
-export default function Chessboard() {
-  const [board, setBoard] = useState<(ChessPiece | null)[][]>(initialBoard);
-  const [selectedSquare, setSelectedSquare] = useState<{
-    row: number;
-    col: number;
-  } | null>(null);
-  const [possibleMoves, setPossibleMoves] = useState<
-    { row: number; col: number }[]
-  >([]);
+interface ChessBoardProps {
+  game: GameStateDto;
+  selectedSquare: string | null;
+  validMoves: string[];
+  lastMove: { from: string; to: string } | null;
+  onSquareClick: (square: string) => void;
+}
 
-  const handleSquareClick = (row: number, col: number) => {
-    if (selectedSquare) {
-      const newBoard = board.map((r) => r.slice());
-      const piece = newBoard[selectedSquare.row][selectedSquare.col];
-      if (
-        piece &&
-        possibleMoves.some((move) => move.row === row && move.col === col)
-      ) {
-        newBoard[row][col] = piece;
-        newBoard[selectedSquare.row][selectedSquare.col] = null;
-        setBoard(newBoard);
-        console.log(
-          `Moved piece from (${selectedSquare.row}, ${selectedSquare.col}) to (${row}, ${col})`
+export default function ChessBoard({
+  game,
+  selectedSquare,
+  validMoves,
+  lastMove,
+  onSquareClick
+}: ChessBoardProps) {
+  const renderBoard = () => {
+    const squares = [];
+    for (let rank = 8; rank >= 1; rank--) {
+      for (let file = 0; file < 8; file++) {
+        const square = String.fromCharCode(97 + file) + rank; // a1, b1, etc.
+        const piece = game.boardState[square] || null;
+        const isSelected = selectedSquare === square;
+        const isValidMove = validMoves.includes(square);
+        const isLastMoveSquare = lastMove && (lastMove.from === square || lastMove.to === square);
+        
+        squares.push(
+          <ChessSquare
+            key={square}
+            square={square}
+            piece={piece}
+            isSelected={isSelected}
+            isValidMove={isValidMove}
+            isLastMove={!!isLastMoveSquare}
+            onClick={() => onSquareClick(square)}
+          />
         );
       }
-      setSelectedSquare(null);
-      setPossibleMoves([]);
-    } else {
-      const piece = board[row][col];
-      if (piece) {
-        setSelectedSquare({ row, col });
-        setPossibleMoves(getPossibleMoves(board, row, col));
-      }
     }
+    return squares;
   };
 
-  const rows = Array.from({ length: board.length }, (_, i) => i);
-  const cols = Array.from({ length: board[0].length }, (_, i) => i);
-
   return (
-    <div className="aspect-square grid grid-cols-8 w-full">
-      {rows.flatMap((row) =>
-        cols.map((col) => {
-          const isDark = (row + col) % 2 === 1;
-          const piece = board[row][col];
-          const isSelected =
-            selectedSquare &&
-            selectedSquare.row === row &&
-            selectedSquare.col === col;
-
-          const isPossibleMove = possibleMoves.some(
-            (move) => move.row === row && move.col === col
-          );
-
-          return (
-            <div
-              key={`${row}-${col}`}
-              className={`w-full h-full flex items-center justify-center relative 
-                ${isDark ? "bg-gray-700" : "bg-gray-200"}
-                ${isSelected ? "ring-4 ring-yellow-400 z-10" : ""}
-                ${
-                  isPossibleMove
-                    ? "after:content-[''] after:absolute after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2 after:w-6 after:h-6 after:bg-black/40 after:rounded-full"
-                    : ""
-                }
-                `}
-              onClick={() => handleSquareClick(row, col)}
-            >
-              {piece && <Image src={piece.src} alt={piece.alt} fill priority />}
-            </div>
-          );
-        })
-      )}
+    <div className="flex-1 flex justify-center">
+      <div className="aspect-square grid grid-cols-8 w-full max-w-2xl">
+        {renderBoard()}
+      </div>
     </div>
   );
 }
