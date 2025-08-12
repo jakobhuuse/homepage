@@ -8,6 +8,8 @@ import { AppDataSource } from './config/data-source';
 import http from 'http';
 import { Server as SocketIOServer } from "socket.io";
 import { swaggerOptions } from './config/swagger';
+import cookieParser from 'cookie-parser';
+import { guestIdMiddleware } from './shared/middlewares/guestIdMiddleware';
 
 
 AppDataSource.initialize()
@@ -28,6 +30,8 @@ app.use(cors({
     credentials: true,
 }))
 app.use(express.json());
+app.use(cookieParser())
+app.use(guestIdMiddleware)
 app.use('/api', router)
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.get('/api-docs.json', (req, res) => {

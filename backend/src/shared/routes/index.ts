@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { chessRoutes } from '../../domains/chess/controllers/ChessController';
+import { chessRoutes } from '../../chess/controllers/ChessController';
 
 const router = Router();
 

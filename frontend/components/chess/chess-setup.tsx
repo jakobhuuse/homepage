@@ -4,11 +4,11 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlertCircle, Users, Gamepad2 } from 'lucide-react';
+import { AlertCircle, Users, Gamepad2, Copy, Check } from 'lucide-react';
 
 interface ChessSetupProps {
-  onCreateGame: (playerName: string) => void;
-  onJoinGame: (inviteCode: string, playerName: string) => void;
+  onCreateGame: () => void;
+  onJoinGame: (inviteCode: string) => void;
   isCreating: boolean;
   isJoining: boolean;
   error?: string;
@@ -21,24 +21,31 @@ export default function ChessSetup({
   isJoining,
   error 
 }: ChessSetupProps) {
-  const [playerName, setPlayerName] = useState('');
   const [inviteCode, setInviteCode] = useState('');
   const [mode, setMode] = useState<'create' | 'join'>('create');
+  const [copied, setCopied] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleCreateGame = () => {
+    onCreateGame();
+  };
+
+  const handleJoinGame = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!playerName.trim()) return;
-    
-    if (mode === 'create') {
-      onCreateGame(playerName.trim());
-    } else {
-      if (!inviteCode.trim()) return;
-      onJoinGame(inviteCode.trim(), playerName.trim());
+    if (!inviteCode.trim()) return;
+    onJoinGame(inviteCode.trim());
+  };
+
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
     }
   };
 
   const isLoading = isCreating || isJoining;
-  const isFormValid = playerName.trim() && (mode === 'create' || inviteCode.trim());
 
   return (
     <div className="max-w-md mx-auto">
@@ -78,86 +85,91 @@ export default function ChessSetup({
             </Button>
           </div>
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <label htmlFor="playerName" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                Player Name
-              </label>
-              <Input
-                id="playerName"
-                value={playerName}
-                onChange={(e) => setPlayerName(e.target.value)}
-                placeholder="Enter your name"
-                required
-                disabled={isLoading}
+          {/* Create Game Section */}
+          {mode === 'create' && (
+            <div className="space-y-4">
+              <Button
+                onClick={handleCreateGame}
                 className="w-full"
-              />
-            </div>
-            
-            {mode === 'join' && (
-              <div className="space-y-2">
-                <label htmlFor="inviteCode" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                  Invite Code
-                </label>
-                <Input
-                  id="inviteCode"
-                  value={inviteCode}
-                  onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
-                  placeholder="Enter invite code"
-                  required
-                  disabled={isLoading}
-                  className="w-full font-mono"
-                />
-                <p className="text-xs text-muted-foreground">
-                  Ask your friend for the game invite code
-                </p>
-              </div>
-            )}
-            
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={!isFormValid || isLoading}
-              size="lg"
-            >
-              {isLoading ? (
-                <div className="flex items-center gap-2">
-                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                  {mode === 'create' ? 'Creating Game...' : 'Joining Game...'}
-                </div>
-              ) : (
-                <>
-                  {mode === 'create' ? 'Create New Game' : 'Join Game'}
-                </>
-              )}
-            </Button>
-          </form>
+                disabled={isLoading}
+                size="lg"
+              >
+                {isCreating ? (
+                  <div className="flex items-center gap-2">
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                    Creating Game...
+                  </div>
+                ) : (
+                  'Create New Game'
+                )}
+              </Button>
 
-          {/* Mode Description */}
-          <div className="p-4 bg-muted/50 rounded-lg">
-            {mode === 'create' ? (
-              <div className="space-y-2">
-                <h4 className="text-sm font-medium flex items-center gap-2">
-                  <Users className="h-4 w-4" />
-                  Creating a New Game
-                </h4>
-                <p className="text-xs text-muted-foreground">
-                  You'll play as White pieces and get an invite code to share with your opponent.
-                </p>
+              <div className="p-4 bg-muted/50 rounded-lg">
+                <div className="space-y-2">
+                  <h4 className="text-sm font-medium flex items-center gap-2">
+                    <Users className="h-4 w-4" />
+                    Creating a New Game
+                  </h4>
+                  <p className="text-xs text-muted-foreground">
+                    You'll play as White pieces and get an invite code to share with your opponent.
+                  </p>
+                </div>
               </div>
-            ) : (
-              <div className="space-y-2">
-                <h4 className="text-sm font-medium flex items-center gap-2">
-                  <Gamepad2 className="h-4 w-4" />
-                  Joining an Existing Game
-                </h4>
-                <p className="text-xs text-muted-foreground">
-                  You'll play as Black pieces. Make sure you have the correct invite code from your friend.
-                </p>
+            </div>
+          )}
+
+          {/* Join Game Section */}
+          {mode === 'join' && (
+            <div className="space-y-4">
+              <form onSubmit={handleJoinGame} className="space-y-4">
+                <div className="space-y-2">
+                  <label htmlFor="inviteCode" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    Invite Code
+                  </label>
+                  <Input
+                    id="inviteCode"
+                    value={inviteCode}
+                    onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
+                    placeholder="Enter invite code"
+                    required
+                    disabled={isLoading}
+                    className="w-full font-mono"
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Ask your friend for the game invite code
+                  </p>
+                </div>
+                
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={!inviteCode.trim() || isLoading}
+                  size="lg"
+                >
+                  {isJoining ? (
+                    <div className="flex items-center gap-2">
+                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                      Joining Game...
+                    </div>
+                  ) : (
+                    'Join Game'
+                  )}
+                </Button>
+              </form>
+
+              <div className="p-4 bg-muted/50 rounded-lg">
+                <div className="space-y-2">
+                  <h4 className="text-sm font-medium flex items-center gap-2">
+                    <Gamepad2 className="h-4 w-4" />
+                    Joining an Existing Game
+                  </h4>
+                  <p className="text-xs text-muted-foreground">
+                    You'll play as Black pieces. Make sure you have the correct invite code from your friend.
+                  </p>
+                </div>
               </div>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Error Display */}
           {error && (

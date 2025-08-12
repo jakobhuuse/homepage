@@ -45,7 +45,7 @@ export default function ChessGame() {
   const game = gameData?.data;
 
   // Handle game creation
-  const handleCreateGame = useCallback(async (playerName: string) => {
+  const handleCreateGame = useCallback(async () => {
     try {
       setError('');
       const response = await createGameMutation.mutateAsync();
@@ -64,7 +64,7 @@ export default function ChessGame() {
   }, [createGameMutation, router]);
 
   // Handle joining game
-  const handleJoinGame = useCallback(async (inviteCode: string, playerName: string) => {
+  const handleJoinGame = useCallback(async (inviteCode: string) => {
     try {
       setError('');
       const response = await joinGameMutation.mutateAsync({

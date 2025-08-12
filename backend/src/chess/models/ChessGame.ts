@@ -6,20 +6,11 @@ export class ChessGame {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ unique: true })
-  inviteCode: string;
-
   @Column({ nullable: true })
   whitePlayerId: string;
 
   @Column({ nullable: true })
   blackPlayerId: string;
-
-  @Column({ nullable: true })
-  whitePlayerName: string;
-
-  @Column({ nullable: true })
-  blackPlayerName: string;
 
   @Column({
     type: 'enum',

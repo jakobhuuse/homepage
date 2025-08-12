@@ -1,6 +1,6 @@
 import "reflect-metadata"
 import { DataSource } from "typeorm"
-import { ChessGame } from "../domains/chess/models/ChessGame"
+import { ChessGame } from "../chess/models/ChessGame"
 
 export const AppDataSource = new DataSource({
     type: "postgres",

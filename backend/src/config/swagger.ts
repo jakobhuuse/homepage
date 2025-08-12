@@ -20,8 +20,8 @@ export const swaggerOptions = {
     },
 
     apis: [
-        './src/domains/**/controllers/*.ts',
-        './src/domains/**/types.ts',
+        './src/**/controllers/*.ts',
+        './src/**/types.ts',
         './src/shared/routes/*.ts',
     ]
 }

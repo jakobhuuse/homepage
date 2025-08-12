@@ -34,6 +34,22 @@ export enum PieceColor {
   BLACK = 'black'
 }
 
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     CreateGameDto:
+ *       type: object
+ *       properties:
+ *         side:
+ *           $ref: '#/components/schemas/PieceColor'
+ *         
+ */
+export interface CreateGameDto {
+  side: PieceColor | null
+}
+
 /**
  * @swagger
  * components:
@@ -41,41 +57,14 @@ export enum PieceColor {
  *     JoinGameDto:
  *       type: object
  *       required:
- *         - inviteCode
+ *         - id
  *       properties:
- *         inviteCode:
+ *         id:
  *           type: string
  *           example: "ABC123"
  */
 export interface JoinGameDto {
-  inviteCode: string;
-}
-
-/**
- * @swagger
- * components:
- *   schemas:
- *     MakeMoveDto:
- *       type: object
- *       required:
- *         - from
- *         - to
- *       properties:
- *         from:
- *           type: string
- *           example: "a2"
- *         to:
- *           type: string
- *           example: "a4"
- *         promotion:
- *           type: string
- *           enum: [q, r, b, n]
- *           example: "q"
- */
-export interface MakeMoveDto {
-  from: string;
-  to: string;
-  promotion?: string;
+  id: string;
 }
 
 /**
@@ -211,7 +200,7 @@ export interface ChessMove {
  *       type: object
  *       required:
  *         - id
- *         - inviteCode
+ *         - side
  *         - status
  *         - currentTurn
  *         - boardState
@@ -224,18 +213,10 @@ export interface ChessMove {
  *       properties:
  *         id:
  *           type: string
- *           example: "game123"
- *         inviteCode:
- *           type: string
  *           example: "ABC123"
- *         whitePlayerId:
- *           type: string
+ *         side:
+ *           $ref: '#/components/schemas/PieceColor'
  *           nullable: true
- *           example: "user1"
- *         blackPlayerId:
- *           type: string
- *           nullable: true
- *           example: "user2"
  *         status:
  *           $ref: '#/components/schemas/GameStatus'
  *         currentTurn:
@@ -269,9 +250,7 @@ export interface ChessMove {
  */
 export interface GameStateDto {
   id: string;
-  inviteCode: string;
-  whitePlayerId: string | null;
-  blackPlayerId: string | null;
+  side: PieceColor,
   status: GameStatus;
   currentTurn: PieceColor;
   boardState: ChessBoard;
@@ -282,37 +261,4 @@ export interface GameStateDto {
   isStalemate: boolean;
   createdAt: Date;
   updatedAt: Date;
-}
-
-/**
- * @swagger
- * components:
- *   schemas:
- *     WebSocketMessage:
- *       type: object
- *       required:
- *         - type
- *         - data
- *         - gameId
- *         - timestamp
- *       properties:
- *         type:
- *           type: string
- *           enum: [game_update, player_joined, move_made, game_ended, error]
- *           example: "game_update"
- *         data:
- *           type: object
- *         gameId:
- *           type: string
- *           example: "game123"
- *         timestamp:
- *           type: string
- *           format: date-time
- *           example: "2025-08-05T12:34:56Z"
- */
-export interface WebSocketMessage {
-  type: 'game_update' | 'player_joined' | 'move_made' | 'game_ended' | 'error';
-  data: any;
-  gameId: string;
-  timestamp: Date;
 }
